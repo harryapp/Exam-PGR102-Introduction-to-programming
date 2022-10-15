@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Oppgave 3. Matlageret (25%)</title>
+</head>
+<body>
+
+	<h3>Matlageret</h3>
+	<label>Produktnavn</label>
+	<input id="productname-input" type="text"><br>
+	<label>Antall på lager</label>
+	<input id="amount-input" type="text"><br>
+	<input id="add-product-btn" type="button" value="Legg til produkt i array">
+	<input id="show-productlist-btn" type="button" value="Vis produkter du har lagt til">
+	<ul id="output"></ul>
+	
+	<script>
+
+		var productnameInput = document.getElementById("productname-input");
+		var amountInput = document.getElementById("amount-input");
+
+		var addProductBtn = document.getElementById("add-product-btn");
+		var showProductlistBtn = document.getElementById("show-productlist-btn");
+
+		var output = document.getElementById("output");
+
+		var productArray = [];
+
+		addProductBtn.onclick = addProduct;
+		showProductlistBtn.onclick = showProductlist;
+
+		function addProduct(){
+			productArray.push({name:productnameInput.value, amount: parseInt(amountInput.value)})
+			productnameInput.value = "";
+			amountInput.value = "";
+			
+		}
+
+		function showProductlist(){
+			var numberOfProducts = productArray.length;
+			output.innerHTML = `<h3>Beholdning</h3>`;
+			
+			productArray.sort(sortByAmount);
+
+			for(i = 0; i < numberOfProducts; i++){
+				output.innerHTML += `
+				<li>
+					${productArray[i].name}, antall: ${productArray[i].amount}
+				</li>
+				`;
+			}
+		}
+
+		/* 	
+		
+		Forklaring av funksjonen sortByAmount:
+		Det er en funksjon som brukes som et argument i sort-funksjonen. Det er instruksjon på hvordan produktene i arrayet skal sorteres.
+
+		Funksjonen sammenligner produktenes amount-verdi i arrayet for å kunne rangere rekkefølgen. Den returnerer:
+		- 1 hvis amount i a er mindre enn amount i b
+		- -1 hvis amount i a er større enn amount i b
+		- 0 hvis amount i a er lik amount i b
+
+		Med dette vil sort-funksjonen sortere produktene i arrayet etter synkende amount (fra høyeste til laveste). 
+
+		*/
+		
+		function sortByAmount(a, b) {
+		  if (a.amount < b.amount) {
+			return 1;
+		  }
+		  if (a.amount > b.amount) {
+			return -1;
+		  }
+		  return 0;
+
+		}
+
+
+
+	</script>
+</body>
+</html>
+
+

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Nettbutikk</title>
+	<style>
+
+		body{
+			background-color: yellow;
+		}
+
+		.main-container{
+			margin: 10px;
+			display: flex;
+			gap: 10px;
+			
+		}
+
+		.product-container{
+			
+			background-color: whitesmoke;
+			border: black solid 2px;
+			width: 60%;
+			flex: 3;
+	
+			
+		}
+
+		.shopcart-container{
+			background-color: whitesmoke;
+			border: black solid 2px;
+			width: 500px;
+			flex: 1;
+		}
+
+		img{
+			height: 50px;
+			width: 50px;
+			padding: 10px;
+		}
+
+		.product-box{
+			border: black solid 2px;
+			height: 300px;
+			width: 200px;
+			text-align: center;
+			margin: 10px;
+			float: left;
+			
+		}
+
+		.top-container{
+			height: 100px;
+		}
+
+		.remove-btn{
+			display: inline;
+		}
+
+		.shopcart-item{
+			margin: 10px;
+		}
+
+
+
+
+	</style>
+</head>
+<body>
+
+	
+	<header class="top-container">
+		<h1>Velkommen til SuperSpar!</h1>
+	</header>
+
+	<main class="main-container">
+
+		<section class="product-container" >
+			<h3>Velg produkt</h3>
+			<div id="product-list"></div>
+		</section>
+
+		<section class="shopcart-container" >
+			<h3>Din handlekurv</h3>
+			<div id="shopcart-list"></div>
+			<div id="total-output"></div>
+		</section>
+	</main>
+
+
+
+
+	<script>
+		var productList = document.getElementById("product-list")
+		var shopcartList = document.getElementById("shopcart-list")
+		var totalOutput = document.getElementById("total-output")
+	
+		var productArray = [
+			{
+				name: "Gulost",
+				price: 50,
+				img: "ost.png"
+			},
+			{
+				name: "Lettmelk",
+				price: 14,
+				img: "melk.png"
+			},
+			{
+				name: "Ekstra lettmelk",
+				price: 15,
+				img: "ekstralettmelk.png"
+			},
+			{
+				name: "Helmelk",
+				price: 16,
+				img: "helmelk.png"
+			},
+			{
+				name: "JuleBrunost",
+				price: 69,
+				img: "julebrunost.png"
+			},
+			{
+				name: "Smør",
+				price: 9,
+				img: "smør.png"
+			}
+		];
+	
+		var numberOfProducts = productArray.length;
+	
+		for (i = 0; i < numberOfProducts; i++){
+	
+			productList.innerHTML += `
+			<div class="product-box">
+				<img src="images/${productArray[i].img}">
+				<p>${productArray[i].name}</p>
+				<p>Pris: ${productArray[i].price} kr</p>
+				<label for="">Antall:</label>
+				<input id="antall-${i}" type="number" value="1">
+				<input id="product-btn-${i}" type="button" value="Legg til handlekurven" onclick="addProduct(${i})">
+			</div>
+			`
+		}
+
+		
+		var shopcartArray = productArray;
+		
+		function addProduct(id){
+			shopcartList.innerHTML = "";		
+			var amountInput = document.getElementById(`antall-${id}`)
+
+			if(shopcartArray[id].amount > 0){
+				shopcartArray[id].amount += parseInt(amountInput.value)
+				
+			}else{
+				shopcartArray[id].amount = parseInt(amountInput.value)
+				
+			}
+
+			shopcartArray[id].subTotal = parseInt(shopcartArray[id].amount * shopcartArray[id].price)
+	
+			updateShopingcart();
+		}
+
+		function updateShopingcart() {
+			var total = 0;
+			shopcartList.innerHTML = "";
+
+			for(i = 0; i < shopcartArray.length; i++){
+				if(shopcartArray[i].amount > 0){
+					
+					total += shopcartArray[i].subTotal;
+
+					shopcartList.innerHTML += `
+					<div id="shopcart-item-${i}" class="shopcart-item">
+						<span>${shopcartArray[i].name}: ${shopcartArray[i].price} kr x ${shopcartArray[i].amount} stk, subtotal ${shopcartArray[i].subTotal} kr</span>
+						<input type="button" value="Fjern" onclick="removeProduct(${i})">
+					</div>
+					`
+
+				}else{
+					// produkt ikke i listen
+				}
+			}
+			totalOutput.innerHTML = `Totalt ${total} kr`
+		}
+
+
+		function removeProduct(id){
+			shopcartArray[id].amount = 0;
+			document.getElementById(`shopcart-item-${id}`).remove();
+			updateShopingcart();
+
+		}
+		
+	
+	</script>
+</body>
+</html>
